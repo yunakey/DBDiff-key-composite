@@ -157,6 +157,8 @@ class DBManager {
 
         if (!empty($primaryKey)) {
             return $primaryKey;
+        } else {
+            Logger::info("Table `$table` has no primary key");
         }
 
         return $params->key ?? [];
