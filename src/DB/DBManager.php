@@ -173,7 +173,7 @@ class DBManager {
         return $this->adapter->getTableSchema($this->getDB($connection), $table);
     }
 
-    public function getDBVariable(string $connection, string $variable): ?string {F
+    public function getDBVariable(string $connection, string $variable): ?string {
         return $this->adapter->getDBVariable($this->getDB($connection), $variable);
     }
 

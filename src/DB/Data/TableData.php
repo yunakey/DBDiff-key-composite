@@ -158,8 +158,6 @@ class TableData {
                 "Primary key or Comparison keys do not match between source and target for table `$table`"
             );
         }
-
-        return true;
     }
 
 }
