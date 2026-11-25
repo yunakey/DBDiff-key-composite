@@ -33,7 +33,7 @@ class TableData {
 
     public function getIterator($connection, $table) {
         $columns = $this->manager->getDataColumns($connection, $table);
-        $order = $this->manager->getKey($connection, $table) ?: $columns;
+        $order = $this->manager->getKey($connection, $table, ParamsFactory::get()) ?: $columns;
         $hex = in_array($this->manager->getDriver(), ['mysql', 'sqlite'], true) ? $this->manager->getBinaryColumns($connection, $table) : [];
         return new TableIterator($this->{$connection}, $table, $order, $columns, $hex);
     }
@@ -42,7 +42,7 @@ class TableData {
         Logger::info("Now getting new data from table `$table`");
         $diffSequence = [];
         $iterator = $this->getIterator('source', $table);
-        $key = $this->manager->getKey('source', $table);
+        $key = $this->manager->getKey('source', $table, ParamsFactory::get());
         $rowRules = TableFilter::getRowIgnoreRules($table, ParamsFactory::get());
         while ($iterator->hasNext()) {
             $data = $iterator->next(ArrayDiff::$size);
@@ -60,7 +60,7 @@ class TableData {
         Logger::info("Now getting old data from table `$table`");
         $diffSequence = [];
         $iterator = $this->getIterator('target', $table);
-        $key = $this->manager->getKey('target', $table);
+        $key = $this->manager->getKey('target', $table, ParamsFactory::get());
         $rowRules = TableFilter::getRowIgnoreRules($table, ParamsFactory::get());
         while ($iterator->hasNext()) {
             $data = $iterator->next(ArrayDiff::$size);
@@ -112,8 +112,8 @@ class TableData {
     public function getDiff($table) {
         $server1 = $this->source->getConfig('host').':'.$this->source->getConfig('port');
         $server2 = $this->target->getConfig('host').':'.$this->target->getConfig('port');
-        $sourceKey  = $this->manager->getKey('source', $table);
-        $targetKey  = $this->manager->getKey('target', $table);
+        $sourceKey  = $this->manager->getKey('source', $table, ParamsFactory::get());
+        $targetKey  = $this->manager->getKey('target', $table, ParamsFactory::get());
         if (empty($sourceKey) && empty($targetKey)) {
             return $this->withOverriding($this->getKeylessDiff($table), 'target', $table);
         }
@@ -148,11 +148,17 @@ class TableData {
 
     private function checkKeys($table, $sourceKey, $targetKey) {
         if (empty($sourceKey) || empty($targetKey)) {
-            throw new DataException("No primary key found in table `$table`");
+            throw new DataException(
+                "Neither primary key nor comparison key found for table `$table`"
+            );
         }
+
         if ($sourceKey != $targetKey) {
-            throw new DataException("Unmatched primary keys in table `$table`");
+            throw new DataException(
+                "Primary key or Comparison keys do not match between source and target for table `$table`"
+            );
         }
+
         return true;
     }
 

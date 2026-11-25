@@ -152,8 +152,14 @@ class DBManager {
         ));
     }
 
-    public function getKey(string $connection, string $table): array {
-        return $this->adapter->getPrimaryKey($this->getDB($connection), $table);
+    public function getKey(string $connection, string $table, object $params): array {
+        $primaryKey = $this->adapter->getPrimaryKey($this->getDB($connection), $table);
+
+        if (!empty($primaryKey)) {
+            return $primaryKey;
+        }
+
+        return $params->key ?? [];
     }
 
     /** @param list<string> $withoutConstraints see DBAdapterInterface::getCreateStatement() */
@@ -165,7 +171,7 @@ class DBManager {
         return $this->adapter->getTableSchema($this->getDB($connection), $table);
     }
 
-    public function getDBVariable(string $connection, string $variable): ?string {
+    public function getDBVariable(string $connection, string $variable): ?string {F
         return $this->adapter->getDBVariable($this->getDB($connection), $variable);
     }
 

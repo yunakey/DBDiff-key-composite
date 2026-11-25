@@ -108,7 +108,9 @@ class DiffCommand extends Command
                 'PostgreSQL: read the target as of this snapshot, exported by a session that holds it open.')
             ->addOption('no-snapshot', null, InputOption::VALUE_NONE,
                 'PostgreSQL: read each query on its own, rather than each side as of one instant. '
-                . 'The snapshot keeps what the diff reads locked until it ends, as pg_dump does.');
+                . 'The snapshot keeps what the diff reads locked until it ends, as pg_dump does.')
+            ->addOption('key', null, InputOption::VALUE_REQUIRED,
+                'Custom comparison key columns (comma-separated).');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -196,6 +198,10 @@ class DiffCommand extends Command
         if ($input->getOption('ignore-schemas')) {
             $params->schemasToIgnore = array_map('trim', explode(',', $input->getOption('ignore-schemas')));
         }
+        if ($input->getOption('key')) {
+            $params->key = array_map('trim', explode(',', $input->getOption('key')));
+        }
+
 
         return $params;
     }
