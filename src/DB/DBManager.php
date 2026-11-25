@@ -14,6 +14,7 @@ use DBDiff\DB\Adapters\AdapterFactory;
 use DBDiff\DB\Adapters\DBAdapterInterface;
 use DBDiff\DB\Adapters\ColumnDependencyAdapterInterface;
 use DBDiff\Exceptions\DBException;
+use DBDiff\Logger;
 
 class DBManager {
 
