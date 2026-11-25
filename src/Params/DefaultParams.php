@@ -178,4 +178,8 @@ class DefaultParams {
     */
     public $input = [];
 
+     /*
+     Key compositions in case primary key is missing
+    */
+    public $key = null;
 }
