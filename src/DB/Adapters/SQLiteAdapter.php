@@ -27,6 +27,18 @@ class SQLiteAdapter implements DBAdapterInterface {
         return Arr::pluck($rows, 'name');
     }
 
+    public function getAltKey(Connection $connection, string $table, array $altKey): array {
+        $columns = $this->getColumns($connection, $table);
+        $matching = [];
+
+        foreach ($altKey as $key) {
+            if (in_array($key, $columns, true)) {
+                $matching[] = $key;
+            }
+        }
+        return $matching;
+    }
+
     public function getPrimaryKey(Connection $connection, string $table): array {
         $rows = self::tableInfo($connection, $table);
         $pk   = [];

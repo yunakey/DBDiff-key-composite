@@ -46,6 +46,18 @@ class MySQLAdapter implements DBAdapterInterface {
         return Arr::pluck($result, 'Field');
     }
 
+    public function getAltKey(Connection $connection, string $table, array $altKey): array {
+        $columns = $this->getColumns($connection, $table);
+        $matching = [];
+
+        foreach ($altKey as $key) {
+            if (in_array($key, $columns, true)) {
+                $matching[] = $key;
+            }
+        }
+        return $matching;
+    }
+
     public function getPrimaryKey(Connection $connection, string $table): array {
         $keys = $connection->select("show indexes from " . QueryHelper::backtick($table));
         $pkey = [];

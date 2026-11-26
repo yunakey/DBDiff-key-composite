@@ -158,28 +158,16 @@ class DBManager {
 
         if (!empty($primaryKey)) {
             return $primaryKey;
-
         }
         Logger::info("Table `$table` has no primary key");
-        $altKey = $params->key ?? [];
 
-        if (empty($altKey) {
-            return [];
+        $altKey = $this->adapter->getAltKey($this->getDB($connection), $table);
+        if (!empty($altKey)) {
+            return $altKey;
         }
+        Logger::info("Table `$table` has no alternative key");
 
-        $sourceColumns = $this->getDataColumns('source', $table);
-        $targetColumns = $this->getDataColumns('target', $table);
-
-        foreach ($altKey as $column) {
-            if (
-                !in_array($column, $sourceColumns, true) ||
-                !in_array($column, $targetColumns, true)
-            ) {
-                return [];
-            }
-        }
-
-        return $altKey;
+        return [];
     }
 
     /** @param list<string> $withoutConstraints see DBAdapterInterface::getCreateStatement() */

@@ -25,6 +25,11 @@ interface DBAdapterInterface {
     public function getColumns(Connection $connection, string $table): array;
 
     /**
+     * Return the alternative key column name(s) for the given table.
+     */
+    public function getAltKey(Connection $connection, string $table, array $altKey): array;
+
+    /**
      * Return the primary-key column name(s) for the given table.
      */
     public function getPrimaryKey(Connection $connection, string $table): array;

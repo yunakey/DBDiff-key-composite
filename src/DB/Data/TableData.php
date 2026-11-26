@@ -149,13 +149,13 @@ class TableData {
     private function checkKeys($table, $sourceKey, $targetKey) {
         if (empty($sourceKey) || empty($targetKey)) {
             throw new DataException(
-                "Neither primary key nor comparison key found for table `$table`"
+                "primary key or alternative key not found for table `$table`"
             );
         }
 
         if ($sourceKey != $targetKey) {
             throw new DataException(
-                "Primary key or Comparison keys do not match between source and target for table `$table`"
+                "Primary key or alternative keys do not match between source and target for table `$table`"
             );
         }
     }

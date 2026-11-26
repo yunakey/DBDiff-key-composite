@@ -179,7 +179,7 @@ class DefaultParams {
     public $input = [];
 
      /*
-     Key compositions in case primary key is missing
+     Alternative key in case primary key is not available
     */
-    public $key = null;
+    public $altKey = null;
 }
