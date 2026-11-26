@@ -199,7 +199,7 @@ class DiffCommand extends Command
             $params->schemasToIgnore = array_map('trim', explode(',', $input->getOption('ignore-schemas')));
         }
         if ($input->getOption('altKey')) {
-            $params->key = array_map('trim', explode(',', $input->getOption('altKey')));
+            $params->altKey = array_map('trim', explode(',', $input->getOption('altKey')));
         }
 
 

@@ -161,9 +161,11 @@ class DBManager {
         }
         Logger::info("Table `$table` has no primary key");
 
-        $altKey = $this->adapter->getAltKey($this->getDB($connection), $table);
-        if (!empty($altKey)) {
-            return $altKey;
+        if (!empty($params->altKey)) {
+            $altKey = $this->adapter->getAltKey($this->getDB($connection), $table, $params->altKey);
+            if (!empty($altKey)) {
+                return $altKey;
+            }
         }
         Logger::info("Table `$table` has no alternative key");
 
